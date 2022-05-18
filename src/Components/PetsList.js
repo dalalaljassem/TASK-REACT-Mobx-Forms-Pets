@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import PetItem from './PetItem';
-import { observer } from 'mobx-react';
-import petStore from '../petStore';
-function PetsList() {
-  const [query, setQuery] = useState('');
-  const [type, setType] = useState('');
-  const pets = petStore.pets
+import React, { useState } from "react";
+import PetItem from "./PetItem";
+import petStore from "../petStore";
+import {observer} from "mobx-react"
+import PetCreateModal from "./PetCreateModal";
+
+function PetsList({ petsData }) {
+  const [query, setQuery] = useState("");
+  const [type, setType] = useState("");
+  const [pet, setPet] = useState(petsData);
+
+  const petList =petStore.pets
     .filter(
       (pet) =>
         pet.name.toLowerCase().includes(query.toLowerCase()) &&
         pet.type.includes(type)
     )
     .map((pet) => <PetItem key={pet.id} pet={pet} />);
+
   return (
+
     <section id="doctors" class="doctor-section pt-140">
+      <PetCreateModal/>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-xxl-5 col-xl-6 col-lg-7">
@@ -49,7 +56,7 @@ function PetsList() {
           </div>
         </div>
 
-        <div class="row justify-content-center">{pets}</div>
+        <div class="row justify-content-center">{petList}</div>
       </div>
     </section>
   );
